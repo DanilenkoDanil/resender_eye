@@ -45,7 +45,6 @@ def get_info(number: str):
             offset_date=None, add_offset=0,
             limit=2, max_id=0, min_id=0,
             hash=0))
-        print(history.messages[0].message)
         if "Расширенный поиск" in history.messages[0].message:
             break
         elif 'Оператор и регион не установлены!' in history.messages[0].message:
