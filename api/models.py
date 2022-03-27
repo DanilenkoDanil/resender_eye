@@ -16,7 +16,7 @@ class Setting(models.Model):
 
 class Account(models.Model):
     name = models.CharField(max_length=250)
-    session_file = models.FileField()
+    session_file = models.FileField(upload_to='sessions/')
 
     class Meta:
         verbose_name = "Аккаунт"
@@ -29,7 +29,7 @@ class Account(models.Model):
 class Result(models.Model):
     number = models.CharField(max_length=250, unique=True)
     text = models.TextField()
-    file = models.FileField()
+    file = models.FileField(blank=True, null=True, upload_to="media")
 
     class Meta:
         verbose_name = "Результат"

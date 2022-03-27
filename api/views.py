@@ -3,6 +3,7 @@ from rest_framework import status, generics, permissions
 from api.scan import get_info
 from api.models import Result
 from api.serializers import ResultSerializer
+from background_task.models import Task
 
 
 class GetInfoApiView(generics.RetrieveAPIView):
@@ -16,12 +17,8 @@ class GetInfoApiView(generics.RetrieveAPIView):
             serializer = ResultSerializer(result)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except Result.DoesNotExist:
-            result, file = get_info(number)
-            if file is None:
-                result = Result.objects.create(number=number, text=result)
-                serializer = ResultSerializer(result)
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            if len(Task.objects.filter(task_params__contains=number)) == 0:
+                get_info(number)
+                return Response("Ваш запрос принят в обработку", status=status.HTTP_201_CREATED)
             else:
-                result = Result.objects.create(number=number, text=result, file=file)
-                serializer = ResultSerializer(result)
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response("Ваш запрос уже обрабатываеться", status=status.HTTP_200_OK)

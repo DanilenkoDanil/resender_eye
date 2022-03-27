@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 telethon = "*"
+django-background-tasks = "*"
+django = "==3.2"
 
 [dev-packages]
 
