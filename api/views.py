@@ -58,7 +58,7 @@ class GetAuthCode(generics.RetrieveAPIView):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             except Exception as e:
                 print(e)
-                return Response("Не удалось отправить код", status=status.HTTP_400_BAD_REQUEST)
+                return Response(f"Не удалось отправить код {str(e)}", status=status.HTTP_400_BAD_REQUEST)
 
 
 class InputCode(generics.RetrieveAPIView):
