@@ -58,7 +58,6 @@ def get_info(number: str):
             time.sleep(0.5)
 
     text = str(history.messages[0].message)
-    print(history.messages[0])
     for link, inner_text in history.messages[0].get_entities_text(MessageEntityTextUrl):
         text = text.replace(str(inner_text), str(inner_text) + " (" + str(link.url) + ")")
     text = text.replace("ℹ️ Если информация не найдена, закажите «Расширенный поиск»", "")
