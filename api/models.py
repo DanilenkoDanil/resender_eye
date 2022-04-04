@@ -16,7 +16,8 @@ class Setting(models.Model):
 
 class Account(models.Model):
     name = models.CharField(max_length=250)
-    session_file = models.FileField(upload_to='sessions/')
+    phone_code_hash = models.TextField(blank=True, null=True)
+    status = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "Аккаунт"

@@ -12,13 +12,13 @@ from django.core.files.base import File
 @background()
 def get_info(number: str):
     setting = Setting.objects.get(id=1)
-    account = random.choice(list(Account.objects.all()))
+    account = random.choice(list(Account.objects.filter(status=True)))
     print('start')
-    print(account.session_file)
+    print(account.name)
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     client = TelegramClient(
-        "media/" + str(account.session_file),
+        "session_create/" + str(account.name),
         setting.api_id,
         setting.api_hash,
         loop=loop
@@ -45,8 +45,10 @@ def get_info(number: str):
             offset_date=None, add_offset=0,
             limit=2, max_id=0, min_id=0,
             hash=0))
+        print(history.messages[0].message)
         if "Расширенный поиск" in history.messages[0].message:
             break
+
         elif 'Оператор и регион не установлены!' in history.messages[0].message:
             Result.objects.create(number=number, text='Оператор и регион не установлены!')
             client.disconnect()
