@@ -39,26 +39,26 @@ class GetAuthCode(generics.RetrieveAPIView):
             Account.objects.get(name=number)
             return Response('Такой аккаунт уже есть', status=status.HTTP_201_CREATED)
         except Account.DoesNotExist:
-            try:
-                loop = asyncio.new_event_loop()
-                asyncio.set_event_loop(loop)
-                client = TelegramClient(
-                    f'session_create/{number}',
-                    "3480264",
-                    "466a3ed928ef4dcc0936741b3b4cc745",
-                    loop=loop
-                )
-                client.connect()
-                client.send_code_request(number)
-                phone_code_hash = client.send_code_request(number).phone_code_hash
-                # client.sign_in('380665971781', input('Enter code: '))
-                account = Account.objects.create(name=number, phone_code_hash=phone_code_hash)
-                client.disconnect()
-                serializer = AccountSerializer(account)
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            except Exception as e:
-                print(e)
-                return Response(f"Не удалось отправить код {str(e)}", status=status.HTTP_400_BAD_REQUEST)
+            # try:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            client = TelegramClient(
+                f'session_create/{number}',
+                "3480264",
+                "466a3ed928ef4dcc0936741b3b4cc745",
+                loop=loop
+            )
+            client.connect()
+            client.send_code_request(number)
+            phone_code_hash = client.send_code_request(number).phone_code_hash
+            # client.sign_in('380665971781', input('Enter code: '))
+            account = Account.objects.create(name=number, phone_code_hash=phone_code_hash)
+            client.disconnect()
+            serializer = AccountSerializer(account)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            # except Exception as e:
+            #     print(e)
+            #     return Response(f"Не удалось отправить код {str(e)}", status=status.HTTP_400_BAD_REQUEST)
 
 
 class InputCode(generics.RetrieveAPIView):
