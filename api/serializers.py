@@ -13,5 +13,5 @@ class AccountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
-        fields = ("name", "phone_code_hash")
+        fields = ("name", )
 
