@@ -64,12 +64,13 @@ def get_info(number: str):
         result = Result.objects.create(number=number, text=text, file=file)
     except FileNotFoundError:
         result = Result.objects.create(number=number, text=text)
-    delete_info(result)
     client.disconnect()
+    delete_info(result.id)
     return
 
 
 @background(schedule=60*60*24)
-def delete_info(result_objects: Result):
+def delete_info(result_id: int):
+    result_objects = Result.objects.get(id=result_id)
     result_objects.delete()
     return

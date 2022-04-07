@@ -12,3 +12,5 @@ ExecStart=/home/user_name/resender_eye/venv/bin/python /home/user_name/resender_
 
 [Install]
 WantedBy=multi-user.target
+
+sudo cp /home/user_name/resender_eye/tgbot.service /etc/systemd/system/tgbot.service
