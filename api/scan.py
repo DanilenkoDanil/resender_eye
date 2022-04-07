@@ -29,14 +29,12 @@ def get_info(number: str):
         client.send_message(bot, number)
     except Exception as e:
         print(e)
-        Result.objects.create(number=number, text='Оператор и регион не установлены!')
         client.disconnect()
         return
     time.sleep(0.5)
     counter = 0
     while True:
         if counter == 20:
-            Result.objects.create(number=number, text='Оператор и регион не установлены!')
             client.disconnect()
             return
         history = client(GetHistoryRequest(
@@ -49,7 +47,6 @@ def get_info(number: str):
             break
 
         elif 'Оператор и регион не установлены!' in history.messages[0].message:
-            Result.objects.create(number=number, text='Оператор и регион не установлены!')
             client.disconnect()
             return
         else:
@@ -64,8 +61,15 @@ def get_info(number: str):
     try:
         f = open(path, 'rb')
         file = File(f)
-        Result.objects.create(number=number, text=text, file=file)
+        result = Result.objects.create(number=number, text=text, file=file)
     except FileNotFoundError:
-        Result.objects.create(number=number, text=text)
+        result = Result.objects.create(number=number, text=text)
+    delete_info(result)
     client.disconnect()
+    return
+
+
+@background(schedule=60*60*24)
+def delete_info(result_objects: Result):
+    result_objects.delete()
     return
